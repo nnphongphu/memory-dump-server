@@ -4,7 +4,7 @@ export const signInController = async (req, res) => {
     const { email, password } = req.body;
     try {
         const result = await signIn(email, password);
-        res.cookie('token', result, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+        res.cookie('token', result, { maxAge: 60 * 60 * 1000, httpOnly: true });
         res.status(200).send("Sign in successfully!");
     } catch (error) {
         let code = 500;
@@ -18,7 +18,7 @@ export const signUpController = async (req, res) => {
     const { email, password } = req.body;
     try {
         const result = await signUp(email, password);
-        res.cookie('token', result, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+        res.cookie('token', result, { maxAge: 60 * 60 * 1000, httpOnly: true });
         res.status(201).send("Sign up successfully!");
     } catch (error) {
         let code = 500;
