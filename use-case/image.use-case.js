@@ -1,15 +1,7 @@
-import ImageBucket from "../data-access/image.bucket";
+import ImageBucket from "../data-access/image.bucket.js";
 import sharp from "sharp";
-import UserDb from "../data-access/user.db";
-import { ReplicationRuleStatus, RestoreRequestFilterSensitiveLog } from "@aws-sdk/client-s3";
-
-// export async function  (req, res) => {
-//     const posts = await prisma.posts.findMany({orderBy: [{ created: 'desc'}]})
-//     for (let post of posts) {
-//       post.imageUrl = await getObjectSignedUrl(post.imageName)
-//     }
-//     res.send(posts)
-// })
+import crypto from "crypto";
+import UserDb from "../data-access/user.db.js";
 
 const generateFileName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
 
@@ -33,12 +25,12 @@ export const getImages = async (userId) => {
     const user = await UserDb.findOne({ _id: userId });
     const result = []
     for (let image of user.images) {
-        const url = await getObjectSignedUrl(image.imageId)
-        result.push({ url, caption: image.caption });
+        const url = await ImageBucket.getImageSignedUrl(image.imageId);
+        result.push({ url, caption: image.caption, isFavourite: image.isFavourite, imageId: image.imageId });
     }
     return result;
 }
 
-export const addImageToFavourite = async (imageId, userId) => {
-    await UserDb.update({ _id: userId, images: { imageId } }, { $set: { "images.$.isFavourite": true } });
+export const setImageToFavourite = async (imageId, userId, value) => {
+    await UserDb.update({ _id: userId, "images.imageId": imageId }, { $set: { "images.$.isFavourite": value } });
 }

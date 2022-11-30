@@ -1,7 +1,8 @@
 
-import { PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
-import { s3Client } from "../bucket";
-import { bucketName } from "../config";
+import { PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
+import { s3Client } from "../bucket.js";
+import { bucketName } from "../config.js";
 
 function uploadImage(fileBuffer, fileName, mimetype) {
     const uploadParams = {
@@ -30,9 +31,7 @@ async function getImageSignedUrl(key) {
     }
   
     const command = new GetObjectCommand(params);
-    const seconds = 60
-    const url = await getSignedUrl(s3Client, command, { expiresIn: seconds });
-  
+    const url = await getSignedUrl(s3Client, command);
     return url;
 }
 

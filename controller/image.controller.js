@@ -1,5 +1,4 @@
-import { uploadImage, deleteImage } from "../use-case/image"
-import { addImageToFavourite, getImages } from "../use-case/image.use-case";
+import { setImageToFavourite, getImages, uploadImage, deleteImage } from "../use-case/image.use-case.js";
 
 export const uploadImageController = async (req, res) => {
     const { file, userId } = req;
@@ -30,10 +29,10 @@ export const getImagesController = async (req, res) => {
     }
 }
 
-export const addImageToFavouriteController = async (req, res) => {
+export const setImageToFavouriteController = async (req, res) => {
     try {
-        await addImageToFavourite(req.params.id, req.userId);
-        res.send(200).send("Add favourite image successfully!");
+        await setImageToFavourite(req.params.id, req.userId, req.body.isFavourite);
+        res.status(200).send("Set favourite image successfully!");
     } catch (error) {
         res.status(500).send(error);
     }

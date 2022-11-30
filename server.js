@@ -1,15 +1,17 @@
-import { PORT } from "./config";
-import ImageRouter from "./router/image.router";
-import UserRouter from "./router/user.router";
+import ImageRouter from "./router/image.router.js";
+import UserRouter from "./router/user.router.js";
+import { PORT, DATABASE_URL } from "./config.js";
+import cookieParser from "cookie-parser";
+import express from "express";
+import mongoose from "mongoose";
 
-const express = require("express");
 const app = express();
-
-const databaseUrl = process.env.DATABASE_URL;
+app.use(express.json());
+app.use(cookieParser());
 
 app.use("/image", ImageRouter);
 app.use("/user", UserRouter);
 
-mongoose.connect(databaseUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => app.listen(PORT, () => console.log(`Server Running on Port: http://localhost:${PORT}`)))
+mongoose.connect(DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => app.listen(PORT, () => console.log(`Server running on Port: http://localhost:${PORT}`)))
   .catch((error) => console.log(`${error} did not connect`));

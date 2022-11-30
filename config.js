@@ -8,3 +8,4 @@ export const accessKeyId = process.env.AWS_ACCESS_KEY
 export const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 export const PORT = process.env.PORT;
 export const JWT_SECRET = process.env.JWT_SECRET;
+export const DATABASE_URL = process.env.DATABASE_URL;

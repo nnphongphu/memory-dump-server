@@ -1,5 +1,5 @@
 
-import UserModel from "../model/user.model";
+import UserModel from "../model/user.model.js";
 
 async function findOne(filter) {
     return UserModel.findOne(filter);
@@ -7,7 +7,8 @@ async function findOne(filter) {
 
 async function insert(data) {
     const newUser = new UserModel(data);
-    return newUser.save();
+    await newUser.save();
+    return newUser;
 }
 
 async function update(filter, update) {
